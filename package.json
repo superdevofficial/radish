@@ -1,12 +1,12 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Romain GUILLAUME",
     "email": "r.guillaume@superdev.fr",
     "url": "https://superdev.fr"
   },
   "bin": {
-    "pineapple": "./bin/index.js"
+    "radish": "./bin/index.js"
   },
   "bundleDependencies": false,
   "contributors": [],
