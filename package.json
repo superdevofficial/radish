@@ -1,0 +1,48 @@
+{
+  "version": "1.0.0",
+  "author": {
+    "name": "Romain GUILLAUME",
+    "email": "r.guillaume@superdev.fr",
+    "url": "https://superdev.fr"
+  },
+  "bin": {
+    "pineapple": "./bin/index.js"
+  },
+  "bundleDependencies": false,
+  "contributors": [],
+  "devDependencies": {},
+  "dependencies": {
+    "bcryptjs": "^2.3.0",
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "debug": "^4.1.1",
+    "figlet": "^1.2.1",
+    "lodash": "^4.17.11",
+    "mkdirp": "^0.5.1",
+    "twig": "^1.13.3"
+  },
+  "deprecated": false,
+  "description": "Outil pour aider les nuls (lol)",
+  "engines": {
+    "node": ">= 6"
+  },
+  "homepage": "https://superdev.fr",
+  "keywords": [
+    "webpack",
+    "starter",
+    "bootstrap",
+    "radish"
+  ],
+  "license": "MIT",
+  "main": "lib/",
+  "name": "@superdev-official/radish",
+  "title": "Radish",
+  "preferGlobal": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/superdevofficial/radish.git"
+  }
+}

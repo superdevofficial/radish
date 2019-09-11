@@ -1,0 +1,74 @@
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require('webpack');
+const path = require('path');
+
+module.exports = {
+  devtool: "source-map",
+  entry: {
+    main: '{{ input }}{{ inputFile }}'
+  },
+  output: {
+    path: path.resolve(__dirname, '{{ output }}'),
+    filename: 'js/[name].js'
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
+    }),
+    new MiniCssExtractPlugin({
+      filename: "css/style.min.css",
+      chunkFilename: "css/[id].css"
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          query: {
+            presets: ["@babel/preset-env"]
+          }
+        }
+      },
+      {
+        test: /\.(eot|otf|webp|ttf|woff|woff2|svg)(\?.*)?$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: '[name].[ext]',
+              outputPath: '{{ output }}/fonts',
+              publicPath: '../fonts/'
+            }
+          },
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif)(\?.*)?$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              emitFile: false,
+              name: '[name].[ext]',
+              outputPath: '../img',
+            }
+          },
+        ],
+      },
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'resolve-url-loader',
+          'sass-loader?sourceMap',
+        ],
+      }
+    ]
+  }
+};
