@@ -1,5 +1,5 @@
 {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": {
     "name": "Romain GUILLAUME",
     "email": "r.guillaume@superdev.fr",
@@ -19,10 +19,11 @@
     "figlet": "^1.2.1",
     "lodash": "^4.17.11",
     "mkdirp": "^0.5.1",
+    "shelljs": "^0.8.3",
     "twig": "^1.13.3"
   },
   "deprecated": false,
-  "description": "Outil pour aider les nuls (lol)",
+  "description": "Tool for generate starter structure",
   "engines": {
     "node": ">= 6"
   },
