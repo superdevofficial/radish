@@ -63,4 +63,5 @@ typings/
 .next
 
 # app test output
-app
+app.vscode
+.vscode/*
