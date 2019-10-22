@@ -1,0 +1,15 @@
+<?php
+
+if(!( function_exists('{{ name }}_enqueue_script'))){
+	function {{ name }}_enqueue_script () {
+
+	  //Enqueue Styles
+		wp_enqueue_style('{{ name }}-main-css', get_template_directory_uri() . '{{ output }}/css/style.min.css');
+
+		//Enqueue Scripts
+		wp_enqueue_script('{{ name }}-main-js', get_template_directory_uri() . '{{ output }}/js{{ inputFile }}.min.js', array(), false, true);
+
+
+	}
+	add_action('wp_enqueue_scripts', '{{ name }}_enqueue_script');
+}
