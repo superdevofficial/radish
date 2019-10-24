@@ -4,16 +4,30 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
 const path = require('path');
 
-console.log(process.argv);
+class MiniCssExtractPluginCleanup {
+  constructor (index) {
+    this.index = typeof index === 'string' && index || '';
+  }
 
-let full_config = {
+  apply(compiler) {
+    const index = this.index;
+    compiler.hooks.emit.tapAsync("MiniCssExtractPluginCleanup", (compilation, callback) => {
+      Object.keys(compilation.assets)
+        .filter(asset => asset.includes(index))
+        .forEach(asset => delete compilation.assets[asset]);
+      callback();
+    });
+  }
+}
+
+let config = {};
+
+const fullConfig = {
   devtool: "source-map",
-  entry: {
-    main: '{{ input }}{{ inputFile }}.js'
-  },
+  entry: { '{{ jsFile }}': '{{ input }}/js/{{ jsFile }}.js', style: '{{ input }}/scss/{{ scssFile }}.scss' },
   output: {
     path: path.resolve(__dirname, '{{ output }}'),
-    filename: '[folder]/[name].min.[ext]'
+    filename: 'js/[name].min.js'
   },
   plugins: [
     new webpack.ProvidePlugin({
@@ -22,11 +36,12 @@ let full_config = {
       'window.jQuery': 'jquery'
     }),
     new MiniCssExtractPlugin({
-      filename: "css/style.min.css",
+      filename: "css/{{ scssFile }}.min.css",
       chunkFilename: "css/[id].css"
     }),
+    new MiniCssExtractPluginCleanup('js/style.min'),
     new CopyWebpackPlugin([
-      { from: '{{ input }}/img', to: 'img' }
+      { from: '{{ input }}/img', to: './img' }
     ])
   ],
   module: {
@@ -42,28 +57,15 @@ let full_config = {
         }
       },
       {
-        test: /\.(eot|otf|webp|ttf|woff|woff2|svg)(\?.*)?$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              name: '[name].[ext]',
-              outputPath: '{{ output }}/fonts',
-              publicPath: '../fonts/'
-            }
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif)(\?.*)?$/,
+        test: /\.(png|jpg|gif|eot|otf|webp|ttf|woff|woff2|svg)(\?.*)?$/,
         use: [
           {
             loader: "file-loader",
             options: {
               emitFile: true,
               name: '[folder]/[name].[ext]',
-              outputPath: './img/',
-              publicPath: '{{ imgPath }}',
+              outputPath: './',
+              publicPath: '{{ publicPath }}',
             }
           },
         ],
@@ -81,59 +83,32 @@ let full_config = {
   }
 };
 
-let sass_config = {
+const sassConfig = {
   devtool: "source-map",
-  entry: {
-    main: '{{ input }}{{ inputFile }}'
-  },
+  entry: { style: '{{ input }}/scss/{{ scssFile }}.scss' },
   output: {
     path: path.resolve(__dirname, '{{ output }}'),
     filename: 'js/[name].min.js'
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "css/style.min.css",
+      filename: "css/{{ scssFile }}.min.css",
       chunkFilename: "css/[id].css"
     }),
-    new CopyWebpackPlugin([
-      { from: '{{ input }}/img', to: 'img' }
-    ])
+    new MiniCssExtractPluginCleanup('js/style.min'),
   ],
   module: {
-    rules: [
+    rules: [      
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          query: {
-            presets: ["@babel/preset-env"]
-          }
-        }
-      },
-      {
-        test: /\.(eot|otf|webp|ttf|woff|woff2|svg)(\?.*)?$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              name: '[name].[ext]',
-              outputPath: '{{ output }}/fonts',
-              publicPath: '../fonts/'
-            }
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif)(\?.*)?$/,
+        test: /\.(png|jpg|gif|eot|otf|webp|ttf|woff|woff2|svg)(\?.*)?$/,
         use: [
           {
             loader: "file-loader",
             options: {
               emitFile: true,
               name: '[folder]/[name].[ext]',
-              outputPath: './img/',
-              publicPath: '{{ imgPath }}/public/img',
+              outputPath: './',
+              publicPath: '{{ publicPath }}',
             }
           },
         ],
@@ -151,5 +126,59 @@ let sass_config = {
   }
 };
 
+const jsConfig = {
+  devtool: "source-map",
+  entry: { '{{ jsFile }}': '{{ input }}/js/{{ jsFile }}.js' },
+  output: {
+    path: path.resolve(__dirname, '{{ output }}'),
+    filename: 'js/[name].min.js'
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
+    }),
+    new CopyWebpackPlugin([
+      { from: '{{ input }}/img', to: './img' }
+    ])
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          query: {
+            presets: ["@babel/preset-env"]
+          }
+        }
+      },
+      {
+        test: /\.(png|jpg|gif|eot|otf|webp|ttf|woff|woff2|svg)(\?.*)?$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              emitFile: true,
+              name: '[folder]/[name].[ext]',
+              outputPath: './',
+              publicPath: '{{ publicPath }}',
+            }
+          },
+        ],
+      }
+    ]
+  }
+};
 
-module.exports = full_config;
+if (process.argv.includes('--sass')) {
+  config = sassConfig;
+} else if (process.argv.includes('--js')) {
+  config = jsConfig;
+} else {
+  config = fullConfig;
+}
+
+module.exports = config;
