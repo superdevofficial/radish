@@ -1,23 +1,36 @@
+[![npm version](https://badge.fury.io/js/%40superdev-official%2Fradish.svg)](https://badge.fury.io/js/%40superdev-official%2Fradish)
+
 # @superdev-official/radish
 
 
-> Tool for generate starter structure
+> Global tool for generate starter structure (like Wordpress theme or static website)
 
 ## Installation
 
 ```
-npm i -g @superdev-official/radish
+$ npm i -g @superdev-official/radish
 ```
 
 ## Available commands
 
-* watch               Run webpack in watch mode
-* init <projectType>  Init project structure and scripts. ProjectType: static or wordpress (wordpress is not ready yet).
-* mysql-import
-
-To get more info
+Build a starter : 
 ```
-radish --help 
+$ radish init [static|wordpress|null]
+```
+Watch your assets :
+```
+$ radish watch
+  -s, --sass (for SASS assets)
+  -j, --js (for JavaScript assets)
+  (by default, watch all your assets)
+```
+Import an sql file to a MySql database :
+```
+$ radish mysql-import
+```
+To get more informations :
+```
+$ radish --help 
 ```
 
 ## Fill the mysql database
