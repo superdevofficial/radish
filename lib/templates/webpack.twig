@@ -62,10 +62,10 @@ const fullConfig = {
           {
             loader: "file-loader",
             options: {
-              emitFile: true,
-              name: '[folder]/[name].[ext]',
-              outputPath: './',
               publicPath: '{{ publicPath }}',
+              name(file) {
+                return file.replace(path.resolve(__dirname, '{{ input }}'), '') 
+              },
             }
           },
         ],
@@ -105,10 +105,10 @@ const sassConfig = {
           {
             loader: "file-loader",
             options: {
-              emitFile: true,
-              name: '[folder]/[name].[ext]',
-              outputPath: './',
               publicPath: '{{ publicPath }}',
+              name(file) {
+                return file.replace(path.resolve(__dirname, '{{ input }}'), '') 
+              },
             }
           },
         ],
