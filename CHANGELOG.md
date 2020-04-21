@@ -1,3 +1,7 @@
+## 1.3.0 (2020-04-21)
+##### Breaking changes
+* **cli**: use Typescript for the sources
+
 ## 1.2.0 (2019-10-25)
 ##### Features
 * **cli**: allow questions with multiples choices
