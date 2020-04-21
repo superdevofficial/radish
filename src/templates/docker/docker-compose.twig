@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+    db:
+      image: mysql:5.7.18 #version 5.7 très important pour phpmyadmin
+      container_name: radish_mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+      volumes:
+        - ~/docker-persistent/radish/mysql-data:/var/lib/mysql #important le système de fichier doit gérer les permissions (donc pas de NTFS)
+      ports:
+        - "30306:3306"
+      networks:
+      - radish
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: radish_phpmyadmin
+      ports:
+        - "30307:80"
+      environment:
+        PMA_HOST: radish_mysql
+      networks:
+      - radish
+      links:
+      - db
+    nginx-php-fpm:
+      image: richarvey/nginx-php-fpm:latest
+      container_name: radish_nginx_php
+      volumes:
+        - ../:/var/www/html
+        - ./nginx/default.conf:/etc/nginx/default.conf
+        - ./nginx/default.conf:/etc/nginx/sites-available/default.conf
+      ports:
+        - "80:80"
+      environment:
+        ENABLE_XDEBUG: 1
+      networks:
+      - radish
+      links:
+      - db
+
+networks:
+  radish:
+    driver: bridge

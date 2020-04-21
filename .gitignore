@@ -65,3 +65,4 @@ typings/
 # app test output
 app.vscode
 .vscode/*
+old/*

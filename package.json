@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": {
     "name": "Superdev",
     "email": "contact@superdev.fr",
@@ -10,11 +10,22 @@
   },
   "bundleDependencies": false,
   "contributors": [],
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/figlet": "^1.2.0",
+    "@types/lodash": "^4.14.150",
+    "@types/shelljs": "^0.8.7",
+    "@types/twig": "^1.12.3",
+    "cpy-cli": "^3.1.0",
+    "prettier": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.8.3"
+  },
   "dependencies": {
     "bcryptjs": "^2.3.0",
     "chalk": "^2.4.2",
-    "commander": "^2.20.0",
+    "commander": "^5.0.0",
     "debug": "^4.1.1",
     "figlet": "^1.2.1",
     "lodash": "^4.17.11",
@@ -27,7 +38,7 @@
   "deprecated": false,
   "description": "Tool for generate starter structure",
   "engines": {
-    "node": ">= 6"
+    "node": ">= 10"
   },
   "homepage": "https://superdev.fr",
   "keywords": [
@@ -47,5 +58,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/superdevofficial/radish.git"
+  },
+  "scripts": {
+    "node": "node ./bin/index.js",
+    "build": "rimraf ./lib && tsc && cpy . ../../lib/templates --parents --cwd=src/templates",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json"
   }
 }

@@ -2,7 +2,7 @@
 
 process.env.NODE_NO_WARNINGS = 1;
 
-const Radish = require('../lib/radish.js');
+const { Radish } = require('../lib/index.js');
 
 new Radish();
 
